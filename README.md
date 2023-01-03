@@ -1,5 +1,7 @@
 # Tunnel port & Expose
 
+![licence](https://img.shields.io/github/license/beigi-reza/ssh-tunnel)
+
 این اسکریپت به یک سرور tunnel زده و سپس پورت نهایی به صورت عمومی باز می کند
 این اسکریپت برای اجرا از فرمانهای ssh و socat استفاده می نمایید 
 
