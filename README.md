@@ -2,8 +2,7 @@
 
 ![licence](https://img.shields.io/github/license/beigi-reza/ssh-tunnel)
 
-این اسکریپت به یک سرور tunnel زده و سپس پورت نهایی به صورت عمومی باز می کند
-این اسکریپت برای اجرا از فرمانهای ssh و socat استفاده می نمایید 
+This script Create tunnle to a server and then the final port is opened publicly and  use ssh ,socat and pgrep commands to execute this script.
 
 ## Install socat
 
@@ -11,25 +10,41 @@
 apt-get update
 apt-get install socat
 ```
-## PreRun
-قبل از اجرا حتما فایل را ویرایش کرده و متغیر های زیر را مقدار دهی کنید
-
-```cmd
-DestinationIP=<IP>
-DestinationPort=<PORT>
-```
-قبل از اجرا در فانکشن fnStart پورتهایی که باید باز شوند  را مشخص کنید
-
-```cmd
-FnSshPortForwardind 3333 3128
-FnExposePort 3128 80 
-```
-برای باز کدن چندین  پورت این دو خط را تکرار کنید
 
 ### FnSshPortForwardind Help
-
-این فاکشن یک تونل بین سرور مقصد و این سرور ایجاد می کند و پورت شماره 2 را از سرور مقصد بر روی پورت شماره 1 از سرور مبدا به صورت لوکال مانت می کند
+This function creates a tunnel between the destination server and this server and locally mounts port `<destination-port>` from the destination server on port `<local-port>` from the source server.
 
 ### FnExposePort Help
 
-این فاکشن پورت شماره 1 را تحت پورت شماره 2 اکسپوز می کند 
+This faction opens `<local-port>` under port `<Bind_port>` publicly
+
+## PreRun
+
+Replace the following variables in the script file  with appropriate values
+
+- ‍‍`DestinationIP=<IP>`  The destination server we want to connect to
+- `DestinationPort=<PORT>` SSH port of destination server
+in function **`fnStart`** 
+
+
+For each port you want to open, repeat this line and set the value
+
+- `FnSshPortForwardind <local-port> <destination-port>`
+- `FnExposePort <local-port> <Bind_port>` 
+
+`<destination-port>` : The destination port on the destination server
+`<local-port>‍ ` : The port that is opened locally on this server for ssh tunnel
+`<Bind_port>` : The port that is finally opened on the server and is available from everywhere
+
+## Run 
+
+```cmd
+./tunnel++.sh 
+```
+
+- **`c`** for check active **ssh tunnel** and **bidirectional data transfers** to Destination Server
+- **`s`** Start Tunnel and Bind Port/s to `0.0.0.0` as backgrund Process
+- **`k`** kill all **ssh tunnel** and **bidirectional data transfers** 
+ 
+
+

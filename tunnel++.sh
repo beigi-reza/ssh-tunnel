@@ -8,12 +8,11 @@
 #  \/|_|\/ \/|_|\/ \/|_|\/|_|  |_|  \___|\___| |_____|_| |_|\__\___|_|  |_| |_|\___|\__|\/|_|\/ \/|_|\/ \/|_|\/ 
 #                                                                                                               
 #                                                                                                               
-
-## FnSshPortForwardind Help
-# این فاکشن یک تونل بین سرور مقصد و این سرور ایجاد می کند و پورت شماره 2 را از سرور مقصد بر روی پورت شماره 1 از سرور مبدا به صورت لوکال مانت می کند
-## FnExposePort Help
-# این فاکشن پورت شماره 1 را تحت پورت شماره 2 اکسپوز می کند 
-
+##
+## Reza Beigi (r.beigy@gmail.com)
+## https://github.com/beigi-reza/
+## https://linkedin.com/in/reza-beigi
+##
 # apt-get update
 # apt-get install socat
 
@@ -49,7 +48,7 @@ DestinationPort=3031
 
 fnGet(){
   Fnbanner
-  read -p "$white_bold Type Command Mode$green_bold ( Status [$white_bold s $green_bold] / Start Tunnel[$white_bold t $green_bold] / Drop Tunnel [$white_bold d $green_bold] )$rc$white_bold :$red" getValue
+  read -p "$white_bold Type Command Mode$green_bold ( Check [$white_bold c $green_bold] / Start Tunnel[$white_bold s $green_bold] / Drop Tunnel [$white_bold d $green_bold] )$rc$white_bold :$red" getValue
   echo "$rc"
 
   checkGetValue
@@ -58,10 +57,10 @@ fnGet(){
 checkGetValue () {
 
     case "$getValue" in
-        "s")
+        "c")
             FnCheckStatus
         ;;
-        "t")
+        "s")
             Fnstart
         ;;
         "d")
