@@ -42,7 +42,7 @@ This function creates a tunnel between the destination server and this server an
 
 ### FnExposePort
 
-This faction opens `<local-port>` under port `<Bind_port>` publicly
+This function opens `<local-port>` under port `<Bind_port>` publicly
 
 ## PreRun
 
