@@ -48,7 +48,6 @@ fnGet(){
   Fnbanner
   read -p "$white_bold Type Command Mode$green_bold ( Check [$white_bold c $green_bold] / Start Tunnel[$white_bold s $green_bold] / Drop Tunnel [$white_bold d $green_bold] )$rc$white_bold :$red" getValue
   echo "$rc"
-
   checkGetValue
 }
 
@@ -90,6 +89,7 @@ FnFindProsses(){
     ProcessID=$(pgrep -f $1)   
     #
     FnKillProcess $1
+    fnGet
 }
 
 FnKillProcess(){
@@ -148,7 +148,7 @@ FnCheckStatus(){
 #    else
 #       echo "$white_bold No ports are expose for data transfer $RC "             
 #    fi  
-
+  fnGet
 }
 
 Fnstart(){
@@ -158,7 +158,7 @@ Fnstart(){
     #FnSshPortForwardind 8388 8388 # Shadowsocks   
     #FnSshPortForwardind 12887 12887 # outline Manager
     #FnSshPortForwardind 8443 443 # outline Access
-    
+
     }
 
 ###################################################################
