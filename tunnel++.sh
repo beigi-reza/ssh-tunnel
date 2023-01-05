@@ -13,8 +13,6 @@
 ## https://github.com/beigi-reza/
 ## https://linkedin.com/in/reza-beigi
 ##
-# apt-get update
-# apt-get install socat
 
 ## Color
 white="$(tput setaf 7)" # white
@@ -65,7 +63,6 @@ checkGetValue () {
         ;;
         "d")
             FnFindProsses $DestinationIP   
-            FnFindProsses "socat"
         ;;
         *)
            echo "Sorry, I don't understand"
@@ -77,15 +74,16 @@ checkGetValue () {
 
 FnSshPortForwardind (){
     echo "$white_bold port $blue_bold$2 $white_bold Server $blue_bold$DestinationIP $white_bold Bind to local port $yellow_bold$1$RC"
-    ssh -NTC -o ServerAliveInterval=60 -o ExitOnForwardFailure=yes -f -N -p $DestinationPort root@$DestinationIP -L $1:0.0.0.0:$2
+    ssh -NTC -o ServerAliveInterval=60 -o ExitOnForwardFailure=yes -f -N -p $DestinationPort root@$DestinationIP -L 0.0.0.0:$1:0.0.0.0:$2
+
 }
 
 
-FnExposePort (){
-    echo "$white_bold Port $yellow_bold$1 $white_bold Expose from port $red_bold$2$RC"
-    echo ""
-    socat TCP-LISTEN:$2,fork,bind=0.0.0.0 TCP:localhost:$1 &
-}
+#FnExposePort (){
+#    echo "$white_bold Port $yellow_bold$1 $white_bold Expose from port $red_bold$2$RC"
+#    echo ""
+#    socat TCP-LISTEN:$2,fork,bind=0.0.0.0 TCP:localhost:$1 &
+#}
 
 FnFindProsses(){    
     proccessCount=$( pgrep -f $1 | awk 'END { print NR }')
@@ -143,31 +141,25 @@ FnCheckStatus(){
        echo "$white_bold No tunnel found to Server $yellow_bold $DestinationIP $RC "             
     fi  
 
-    socatProcess=$( pgrep -f "socat" | awk 'END { print NR }')    
-    if [ $socatProcess -gt 0 ]
-    then
-       echo "$white_bold Found $yellow_rev$socatProcess$RC$white_bold port/s Exposed for Data Transfer$RC "             
-    else
-       echo "$white_bold No ports are expose for data transfer $RC "             
-    fi  
+#    socatProcess=$( pgrep -f "socat" | awk 'END { print NR }')    
+#    if [ $socatProcess -gt 0 ]
+#    then
+#       echo "$white_bold Found $yellow_rev$socatProcess$RC$white_bold port/s Exposed for Data Transfer$RC "             
+#    else
+#       echo "$white_bold No ports are expose for data transfer $RC "             
+#    fi  
 
 }
 
 Fnstart(){
-     echo "START"
     
-    #FnSshPortForwardind 3128 3128 # Squid 
+    FnSshPortForwardind 3128 3128 # Squid 
     #FnExposePort 3128 80 # Squid Publish to 80
-
-    #FnSshPortForwardind 8388 8388 # Shadowsocks 
-    #FnExposePort 8388 888 # Shadowsocks expose 888
-
+    #FnSshPortForwardind 8388 8388 # Shadowsocks   
     #FnSshPortForwardind 12887 12887 # outline Manager
-    #FnExposePort 12887 8888 # outline Manager Expose 8888
-
     #FnSshPortForwardind 8443 443 # outline Access
-    #FnExposePort 8443 443 # outline Access Expose 443
-}
+    
+    }
 
 ###################################################################
 ###################################################################

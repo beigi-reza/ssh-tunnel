@@ -3,7 +3,7 @@
 ![licence](https://img.shields.io/github/license/beigi-reza/ssh-tunnel)
 
 
-This script Create tunnle to a server and then the final port is opened publicly and  use ssh ,socat and pgrep commands to execute this script.
+This script Create tunnle/s to a server and then the final port is opened publicly and use ssh and pgrep commands to execute this script.
 
 ## Setup SSH Passwordless Login
 to run this script without any problems, it is better for connect servers use SSH KEY so that you are not asked for a password for each connection.
@@ -27,19 +27,9 @@ ssh sheena@192.168.0.11
 ```
 ![ssh](https://www.tecmint.com/wp-content/uploads/2012/10/SSH-Remote-Passwordless-Login.gif)
 
-## Install socat
-
-```cmd
-apt-get update
-apt-get install socat
-```
 
 ### FnSshPortForwardind
-This function creates a tunnel between the destination server and this server and locally mounts port `<destination-port>` from the destination server on port `<local-port>` from the source server.
-
-### FnExposePort
-
-This function opens `<local-port>` under port `<Bind_port>` publicly
+This function creates a tunnel between the destination server and this server and mounts port `<destination-port>` from the destination server on port `<local-port>` from the source server.
 
 ## PreRun
 
@@ -47,17 +37,16 @@ Replace the following variables in the script file  with appropriate values
 
 - ‍‍`DestinationIP=<IP>`  The destination server we want to connect to
 - `DestinationPort=<PORT>` SSH port of destination server
+
 in function **`fnStart`** 
 
 
 For each port you want to open, repeat this line and set the value
 
 - `FnSshPortForwardind <local-port> <destination-port>`
-- `FnExposePort <local-port> <Bind_port>` 
 
 `<destination-port>` : The destination port on the destination server
 `<local-port>‍ ` : The port that is opened locally on this server for ssh tunnel
-`<Bind_port>` : The port that is finally opened on the server and is available from everywhere
 
 ## Run 
 
