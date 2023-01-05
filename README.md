@@ -5,7 +5,6 @@
 
 This script Create tunnle to a server and then the final port is opened publicly and  use ssh ,socat and pgrep commands to execute this script.
 
-
 ## Setup SSH Passwordless Login
 to run this script without any problems, it is better for connect servers use SSH KEY so that you are not asked for a password for each connection.
 
@@ -27,8 +26,6 @@ ssh-copy-id root@192.168.0.11
 ssh sheena@192.168.0.11
 ```
 ![ssh](https://www.tecmint.com/wp-content/uploads/2012/10/SSH-Remote-Passwordless-Login.gif)
-
-
 
 ## Install socat
 
