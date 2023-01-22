@@ -1,13 +1,5 @@
 #!/bin/bash
 #
-#     _       _       _    ______               _____       _                       _      _       _       _    
-#  /\| |/\ /\| |/\ /\| |/\|  ____|             |_   _|     | |                     | |  /\| |/\ /\| |/\ /\| |/\ 
-#  \ ` ' / \ ` ' / \ ` ' /| |__ _ __ ___  ___    | |  _ __ | |_ ___ _ __ _ __   ___| |_ \ ` ' / \ ` ' / \ ` ' / 
-# |_     _|_     _|_     _|  __| '__/ _ \/ _ \   | | | '_ \| __/ _ \ '__| '_ \ / _ \ __|_     _|_     _|_     _|
-#  / , . \ / , . \ / , . \| |  | | |  __/  __/  _| |_| | | | ||  __/ |  | | | |  __/ |_ / , . \ / , . \ / , . \ 
-#  \/|_|\/ \/|_|\/ \/|_|\/|_|  |_|  \___|\___| |_____|_| |_|\__\___|_|  |_| |_|\___|\__|\/|_|\/ \/|_|\/ \/|_|\/ 
-#                                                                                                               
-#                                                                                                               
 ##
 ## Reza Beigi (r.beigy@gmail.com)
 ## https://github.com/beigi-reza/
@@ -35,9 +27,9 @@ C6="$(tput setaf 188)"
 ##
 
 
-DestinationIP=195.248.242.73
-DestinationPort=3031
-
+DestinationIP=10.1.8.46
+DestinationPort=22
+DestinationUser=root
 
 #############  Function
 ###################################################################
@@ -46,6 +38,7 @@ DestinationPort=3031
 
 fnGet(){
   Fnbanner
+  echo "$white_bold Type ' $yellow_bold tunnel++.sh --help $white_bold ' for help "
   read -p "$white_bold Type Command Mode$green_bold ( Check [$white_bold c $green_bold] / Start Tunnel[$white_bold s $green_bold] / Drop Tunnel [$white_bold d $green_bold] )$rc$white_bold :$red" getValue
   echo "$rc"
   checkGetValue
@@ -71,9 +64,9 @@ checkGetValue () {
 
 }
 
-FnSshPortForwardind (){
+FnSshPortForward (){    
     echo "$white_bold port $blue_bold$2 $white_bold Server $blue_bold$DestinationIP $white_bold Bind to local port $yellow_bold$1$RC"
-    ssh -NTC -o ServerAliveInterval=60 -o ExitOnForwardFailure=yes -f -N -p $DestinationPort root@$DestinationIP -L 0.0.0.0:$1:0.0.0.0:$2
+    ssh -NTC -o ServerAliveInterval=60 -o ExitOnForwardFailure=yes -f -N -p $DestinationPort $DestinationUser@$DestinationIP -L 0.0.0.0:$1:0.0.0.0:$2
 
 }
 
@@ -88,8 +81,12 @@ FnFindProsses(){
     proccessCount=$( pgrep -f $1 | awk 'END { print NR }')
     ProcessID=$(pgrep -f $1)   
     #
-    FnKillProcess $1
-    fnGet
+    FnKillProcess $1    
+    
+    if [ -z "$2" ]
+    then   
+       fnGet      
+    fi    
 }
 
 FnKillProcess(){
@@ -131,6 +128,26 @@ Fnbanner(){
     echo $C7"                                                         "$RC
 }
 
+FnHelp(){    
+    echo ""
+    echo "$RC       $white_bold -  This script manages the SSH Tunnl/s connections between this server and the destination server."
+    echo "$RC       $white_bold -  SSH connection between two servers must be through a key."
+    echo "$RC       $white_bold -  The destination server information is defined in two variables '$teal_bold DestinationIP$white_bold', '$teal_bold DestinationPort$white_bold' and '$teal_bold DestinationUser' "
+    echo ""
+    echo "$red_bold Help$RC : [$white_bold Run '$blue_bold tunnel++.sh $white_bold' for menu$RC                                       ]"
+    echo "$RC        [          $yellow_bold c $RC = $white_bold Check Active SSH Tunnel $RC                           ]"
+    echo "$RC        [          $yellow_bold s $RC = $white_bold Start Requested Tunnel/s  $RC                         ]"
+    echo "$RC        [          $yellow_bold d $RC = $white_bold Drop All SSH Tunnel/s  $RC                            ]"
+    echo "$RC        [$white_bold     '$blue_bold tunnel++.sh $yellow_bold%1$white_bold'$RC                                              ]"
+    echo "$RC        [          $yellow_bold --chek $RC     = $white_bold Check Active SSH Tunnel $RC                  ]"
+    echo "$RC        [          $yellow_bold --start $RC    = $white_bold Start Requested Tunnel/s  $RC                ]"
+    echo "$RC        [          $yellow_bold --drop $RC     = $white_bold Drop All SSH Tunnel/s  $RC                   ]"
+    echo "$RC        [          $yellow_bold --restart $RC  = $white_bold Drop All SSH Tunnel/s & Start again  $RC     ]"
+    echo ""
+    exit
+
+}
+
 FnCheckStatus(){
 
     sshProcess=$( pgrep -f $DestinationIP | awk 'END { print NR }')    
@@ -148,16 +165,23 @@ FnCheckStatus(){
 #    else
 #       echo "$white_bold No ports are expose for data transfer $RC "             
 #    fi  
-  fnGet
+
+if [ -z "$1" ]
+then   
+   fnGet
+else
+   exit 
+fi
+
 }
 
 Fnstart(){
     
-    FnSshPortForwardind 3128 3128 # Squid 
-    #FnExposePort 3128 80 # Squid Publish to 80
-    #FnSshPortForwardind 8388 8388 # Shadowsocks   
-    #FnSshPortForwardind 12887 12887 # outline Manager
-    #FnSshPortForwardind 8443 443 # outline Access
+    FnSshPortForward 80 80
+    FnSshPortForward 443 443
+    #FnSshPortForward 8388 8388 
+    #FnSshPortForward 12887 12887 
+    #FnSshPortForward 8443 443 
 
     }
 
@@ -166,7 +190,39 @@ Fnstart(){
 ###################################################################
 #############  Function
 
-fnGet
+
+if [ $1 = "help" -o $1 = "-h" -o $1 = "--help" -o $1 = "h" -o $1 = "?" ] ; then
+   clear
+   Fnbanner
+   FnHelp
+fi
+
+if [ -z "$1" ]
+then   
+  clear 
+  fnGet
+fi
+
+case "$1" in
+     "--chek")
+         FnCheckStatus "parameter"
+     ;;
+     "--start")
+         Fnstart
+     ;;
+     "--drop")
+         FnFindProsses $DestinationIP "parameter"
+     ;;
+     "--restart")
+         FnFindProsses $DestinationIP "parameter" 
+         Fnstart
+     ;;
+
+     *)
+        echo "for help type '--help'"        
+     ;;     
+esac
+
 
 
 
