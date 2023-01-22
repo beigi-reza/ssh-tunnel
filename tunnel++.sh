@@ -39,7 +39,7 @@ DestinationUser=root
 fnGet(){
   Fnbanner
   echo "$white_bold Type ' $yellow_bold tunnel++.sh --help $white_bold ' for help "
-  read -p "$white_bold Type Command Mode$green_bold ( Check [$white_bold c $green_bold] / Start Tunnel[$white_bold s $green_bold] / Drop Tunnel [$white_bold d $green_bold] )$rc$white_bold :$red" getValue
+  read -p "$white_bold Type Command Mode$green_bold ( Status [$white_bold u $green_bold] / Start Tunnel[$white_bold s $green_bold] / Drop Tunnel [$white_bold d $green_bold] )$rc$white_bold :$red" getValue
   echo "$rc"
   checkGetValue
 }
@@ -47,7 +47,7 @@ fnGet(){
 checkGetValue () {
 
     case "$getValue" in
-        "c")
+        "u")
             FnCheckStatus
         ;;
         "s")
@@ -92,7 +92,7 @@ FnFindProsses(){
 FnKillProcess(){
     if [ $proccessCount -eq 0 ]
     then
-       echo "$white_bold No$red_bold process$white_bold Found with the statement '$green_bold $1 $white_bold'. $RC "             
+       echo "$red_bold No$white_bold process$red_bold Found with the statement '$blue_bold $1 $red_bold'. $RC "             
     else
        kill -9 $ProcessID       
        FnCheckResult $ProcessID
@@ -104,7 +104,7 @@ FnChecAgeain (){
     proccessCount=$( pgrep -f $1 | awk 'END { print NR }')
     if [ $proccessCount -eq 0 ]
     then
-       echo "$white_bold All the processes that were closed with the statement '$green_bold $1 $white_bold'. $RC "       
+       echo "$red_bold All the processes that were closed with the statement '$white_bold $1 $red_bold'. $RC "       
     else
        FnFindProsses
     fi   
@@ -112,9 +112,9 @@ FnChecAgeain (){
 
 FnCheckResult (){  
   if [ $? -eq 0 ]; then      
-      echo "$white_bold Process/es $red_bold killed $white_bold successfully $RC"   
+      echo "$red_bold Process/es $white_bold killed $red_bold successfully $RC"   
   else
-      echo "$white_bold Process $yellow_bold_bold $1 $white_bold Not Killed $RC"   
+      echo "$red_bold Process $yellow_rev $1 $red_bold Not Killed $RC"   
   fi  
 }
 
@@ -135,11 +135,11 @@ FnHelp(){
     echo "$RC       $white_bold -  The destination server information is defined in two variables '$teal_bold DestinationIP$white_bold', '$teal_bold DestinationPort$white_bold' and '$teal_bold DestinationUser' "
     echo ""
     echo "$red_bold Help$RC : [$white_bold Run '$blue_bold tunnel++.sh $white_bold' for menu$RC                                       ]"
-    echo "$RC        [          $yellow_bold c $RC = $white_bold Check Active SSH Tunnel $RC                           ]"
+    echo "$RC        [          $yellow_bold u $RC = $white_bold Check status SSH Tunnel $RC                           ]"
     echo "$RC        [          $yellow_bold s $RC = $white_bold Start Requested Tunnel/s  $RC                         ]"
     echo "$RC        [          $yellow_bold d $RC = $white_bold Drop All SSH Tunnel/s  $RC                            ]"
     echo "$RC        [$white_bold     '$blue_bold tunnel++.sh $yellow_bold%1$white_bold'$RC                                              ]"
-    echo "$RC        [          $yellow_bold --chek $RC     = $white_bold Check Active SSH Tunnel $RC                  ]"
+    echo "$RC        [          $yellow_bold --status $RC     = $white_bold Check Active SSH Tunnel $RC                  ]"
     echo "$RC        [          $yellow_bold --start $RC    = $white_bold Start Requested Tunnel/s  $RC                ]"
     echo "$RC        [          $yellow_bold --drop $RC     = $white_bold Drop All SSH Tunnel/s  $RC                   ]"
     echo "$RC        [          $yellow_bold --restart $RC  = $white_bold Drop All SSH Tunnel/s & Start again  $RC     ]"
@@ -153,9 +153,9 @@ FnCheckStatus(){
     sshProcess=$( pgrep -f $DestinationIP | awk 'END { print NR }')    
     if [ $sshProcess -gt 0 ]
     then
-       echo "$white_bold Found $yellow_rev$sshProcess$RC$white_bold ssh tunnel to Server $yellow_bold $DestinationIP $RC "             
+       echo "$red_bold Found $yellow_rev$sshProcess$RC$red_bold ssh tunnel to Server $blue_bold $DestinationIP $RC "             
     else
-       echo "$white_bold No tunnel found to Server $yellow_bold $DestinationIP $RC "             
+       echo "$red_bold No tunnel found to Server $blue_bold $DestinationIP $RC "             
     fi  
 
 #    socatProcess=$( pgrep -f "socat" | awk 'END { print NR }')    
@@ -204,7 +204,7 @@ then
 fi
 
 case "$1" in
-     "--chek")
+     "--status")
          FnCheckStatus "parameter"
      ;;
      "--start")
