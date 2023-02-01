@@ -6,6 +6,8 @@
 ## https://linkedin.com/in/reza-beigi
 ##
 
+LogFile=/var/log/ssl-tunnel-activate.log
+
 ## Color
 white="$(tput setaf 7)" # white
 white_bold="$(tput bold)$(tput setaf 15)"
@@ -175,6 +177,11 @@ fi
 
 }
 
+FnLogit(){
+  TIME=$(date)
+  echo "$1 - on :  $TIME " >>$LogFile
+}
+
 Fnstart(){
     
     FnSshPortForward 80 80
@@ -216,6 +223,7 @@ case "$1" in
      "--restart")
          FnFindProsses $DestinationIP "parameter" 
          Fnstart
+         FnLogit
      ;;
 
      *)
